@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# fail fast
+set -o errexit
+set -o pipefail
+
+# args
+PROJECT="$1"
+
+# make a tempdir for GOPATH
+temp=$(mktemp -t gopath_XXXXX)
+rm -rf $temp
+mkdir -p $temp
+
+# some vars for go
+export PATH="/app/go/$HOST/bin:$PATH"
+export GOPATH="$temp"
+export GOROOT="/app/go/$HOST"
+
+# build project
+go get $PROJECT
+
+if [ -d $GOPATH/bin/${GOOS}_${GOARCH} ]; then
+  cat $GOPATH/bin/${GOOS}_${GOARCH}/$(echo $PROJECT | cut -d/ -f3)
+else
+  cat $GOPATH/bin/$(echo $PROJECT | cut -d/ -f3)
+fi
