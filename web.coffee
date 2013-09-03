@@ -6,12 +6,15 @@ log     = require("./lib/logger").init("gobuild")
 spawner = require("./lib/spawner").init()
 stdweb  = require("./lib/stdweb")
 
+binary    = process.env.PROJECT.split("/").pop()
 platforms = process.env.PLATFORMS.split(" ")
+project   = process.env.PROJECT
 
 app = stdweb("gobuild")
 
 app.get "/", (req, res) ->
-  res.send "ok"
+  res.locals.binary_name = (platform) -> if platform.split("-")[0] is "windows" then "#{binary}.exe" else binary
+  res.render "index.jade", platforms:platforms
 
 app.get "/:os-:arch/:name.:type?", (req, res) ->
 
@@ -25,7 +28,7 @@ app.get "/:os-:arch/:name.:type?", (req, res) ->
     GOOS:   req.params.os
     HOST:   process.env.HOST
 
-  ps = spawner.spawn "bin/build #{process.env.PROJECT}", env:env
+  ps = spawner.spawn "bin/build #{project}", env:env
   ps.on "data", (data) -> res.write data
   ps.on "end",         -> res.end()
 
