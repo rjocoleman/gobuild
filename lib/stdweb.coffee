@@ -1,6 +1,6 @@
 coffee  = require("coffee-script")
 express = require("express")
-log     = require("./logger").init("banker")
+log     = require("./logger").init("gobuild")
 
 class Stdweb
 
