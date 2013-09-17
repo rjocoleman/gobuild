@@ -3,4 +3,4 @@
 *.jade
 *.js
 *.swp
-go
+go/*

@@ -15,10 +15,17 @@ mkdir -p $temp
 # some vars for go
 export PATH="/app/go/$HOST/bin:$PATH"
 export GOPATH="$temp"
-export GOROOT="/app/go/$HOST"
+export GOROOT="$(pwd)/go/$HOST"
 
 # build project
-go get $PROJECT
+go get -d $PROJECT
+
+cd $GOPATH/src/$PROJECT
+if [[ ! -z $REF ]]; then
+  git fetch origin >/dev/null 2>&1
+  git checkout $REF >/dev/null 2>&1
+fi
+go get .
 
 if [ -d $GOPATH/bin/${GOOS}_${GOARCH} ]; then
   cat $GOPATH/bin/${GOOS}_${GOARCH}/$(echo $PROJECT | cut -d/ -f3)
