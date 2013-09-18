@@ -28,7 +28,7 @@ fi
 go get .
 
 if [ -d $GOPATH/bin/${GOOS}_${GOARCH} ]; then
-  cat $GOPATH/bin/${GOOS}_${GOARCH}/$(echo $PROJECT | cut -d/ -f3)
+  cat $GOPATH/bin/${GOOS}_${GOARCH}/$(echo $PROJECT | cut -d/ -f3)*
 else
   cat $GOPATH/bin/$(echo $PROJECT | cut -d/ -f3)
 fi
