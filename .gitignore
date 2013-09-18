@@ -2,3 +2,4 @@
 /.env
 /go
 /node_modules
+/vendor
