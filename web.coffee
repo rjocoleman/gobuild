@@ -10,11 +10,14 @@ app = stdweb("gobuild")
 
 app.get "/:user/:repo/:ref/:os/:arch", (req, res) ->
   res.writeHead 200, "Content-Type":"application/octet-stream"
+  version = req.params.ref
+  version = version.substring(1) if version[0] is "v"
   env =
-    GOARCH: req.params.arch
-    GOOS:   req.params.os
-    HOST:   process.env.HOST
-    REF:    req.params.ref
+    GOARCH:  req.params.arch
+    GOOS:    req.params.os
+    HOST:    process.env.HOST
+    REF:     req.params.ref
+    VERSION: version
   ps = spawner.spawn "bin/build github.com/#{req.params.user}/#{req.params.repo}", env:env
   ps.on "data", (data) -> res.write data
   ps.on "end",         -> res.end()

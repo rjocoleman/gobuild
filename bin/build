@@ -13,7 +13,7 @@ rm -rf $temp
 mkdir -p $temp
 
 # some vars for go
-export PATH="/app/go/$HOST/bin:$PATH"
+export PATH="/app/go/$HOST/bin:/app/vendor/bin:$PATH"
 export GOPATH="$temp"
 export GOROOT="$(pwd)/go/$HOST"
 
@@ -24,6 +24,9 @@ cd $GOPATH/src/$PROJECT
 if [[ ! -z $REF ]]; then
   git fetch origin >/dev/null 2>&1
   git checkout $REF >/dev/null 2>&1
+fi
+if [ -f version.go ]; then
+  sed -ie "s/Version = \"dev\"/Version = \"${VERSION}\"/" version.go
 fi
 go get .
 
