@@ -26,7 +26,8 @@ if [[ ! -z $REF ]]; then
   git checkout $REF >/dev/null 2>&1
 fi
 if [ -f version.go ]; then
-  sed -i "" -e "s/Version = \"dev\"/Version = \"${VERSION}\"/" version.go
+  sed -e "s/Version = \"dev\"/Version = \"${VERSION}\"/" version.go > /tmp/version.go
+  cp /tmp/version.go version.go
 fi
 go get .
 
